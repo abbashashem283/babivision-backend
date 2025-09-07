@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Rules\StrongPassword;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 use Magico\JwtAuth\Http\Controllers\JwtAuthController;
@@ -35,6 +36,19 @@ class AuthController extends JwtAuthController
 
 
         return parent::register($request);
+    }
+
+    function login(Request $request){
+         $response = parent::login($request);
+         $status = $response->status();
+        if($response->status() != 200){
+            if($status == 401)
+                return response()->json(["message"=>"Invalid Access"], 401);
+            if($status == 404)
+                return response()->json(["message"=>"User not found"], 401); 
+            return response()->json(["message"=>"$status repsonse"], $status);
+        }
+        return $response;
     }
 
     function test()
