@@ -20,6 +20,8 @@ class AuthController extends JwtAuthController
                 "email" => "required|email",
                 "password" => [
                     'required',
+                    'min:8',
+                    'max:20',
                      new StrongPassword()
                    
                 ],
@@ -29,6 +31,8 @@ class AuthController extends JwtAuthController
                 "name.required" => "name field required",
                 "email.required" => "email field required",
                 "password.required" => "password field required",
+                "password.min"=>"Must have 8 chars minimum",
+                "password.max"=>"Exceeded limit of 20 chars",
                 "confirm_password.required" => "confirm password field required",
                 "confirm_password.same"=>"Confirm password & password don't match"
             ]
@@ -36,6 +40,27 @@ class AuthController extends JwtAuthController
 
 
         return parent::register($request);
+    }
+
+    function resetPassword(Request $request)
+    {
+        $request->validate([
+            "password"=>[
+                'min:8',
+                'max:20',
+                'required',
+                     new StrongPassword()
+            ],
+            "confirm_password" => "required|same:password"
+            ],[
+                "password.required" => "password field required",
+                "password.min"=>"Must have 8 chars minimum",
+                "password.max"=>"Exceeded limit of 20 chars",
+                "confirm_password.required" => "confirm password field required",
+                "confirm_password.same"=>"Confirm password & password don't match"
+            ]);
+
+            return parent::resetPassword($request);
     }
 
     function login(Request $request){

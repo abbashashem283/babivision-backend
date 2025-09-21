@@ -2136,16 +2136,16 @@
         },
         {
             "name": "magico/jwt-auth",
-            "version": "v1.0.3",
+            "version": "v1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abbashashem283/jwt-auth.git",
-                "reference": "c6a04bfee54b595a6746a33a4d72d9d58f65bbc0"
+                "reference": "b251e99e3ff8eaed9658075c5d3fe8c2782bd075"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abbashashem283/jwt-auth/zipball/c6a04bfee54b595a6746a33a4d72d9d58f65bbc0",
-                "reference": "c6a04bfee54b595a6746a33a4d72d9d58f65bbc0",
+                "url": "https://api.github.com/repos/abbashashem283/jwt-auth/zipball/b251e99e3ff8eaed9658075c5d3fe8c2782bd075",
+                "reference": "b251e99e3ff8eaed9658075c5d3fe8c2782bd075",
                 "shasum": ""
             },
             "require": {
@@ -2169,9 +2169,9 @@
             "description": "A JWT authentication package for Laravel.",
             "support": {
                 "issues": "https://github.com/abbashashem283/jwt-auth/issues",
-                "source": "https://github.com/abbashashem283/jwt-auth/tree/v1.0.3"
+                "source": "https://github.com/abbashashem283/jwt-auth/tree/v1.0.5"
             },
-            "time": "2025-09-07T18:19:35+00:00"
+            "time": "2025-09-09T18:51:07+00:00"
         },
         {
             "name": "monolog/monolog",
