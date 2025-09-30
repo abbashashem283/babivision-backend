@@ -16,10 +16,12 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('optician_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->date('day');
+            $table->time('start_time');
+            $table->time('end_time');
             $table->enum('status', ['pending','completed','canceled'])->default('pending');
             $table->timestamps();
+            $table->unique(['optician_id','day','start_time']);
         });
     }
 

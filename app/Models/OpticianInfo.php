@@ -6,14 +6,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class OpticianInfo extends Model
 {
+    protected $table = 'optician_info';
 
     protected $fillable = [
         'user_id',
         'shift_start',
-        'shift_end'
+        'shift_end',
+        'clinic_id'
     ];
 
     public function user() {
-        $this->belongsTo(User::class);
+       return $this->belongsTo(User::class);
+    }
+
+    public function clinic(){
+        return $this->belongsTo(Clinic::class);
     }
 }

@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('optician_info', function (Blueprint $table) {
+        Schema::create('clinics', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->time('shift_start')->nullable();
-            $table->time('shift_end')->nullable();
+            $table->string("name");
+            $table->string("address");
+            $table->decimal("latitude", 10, 7);
+            $table->decimal("longitude", 10, 7);
+            $table->time("open_time");
+            $table->time("close_time");
+            $table->json("workdays");
             $table->timestamps();
         });
     }
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('optician_info');
+        Schema::dropIfExists('clinics');
     }
 };

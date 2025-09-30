@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +20,7 @@ Route::prefix("auth")->controller(AuthController::class)->group(
         Route::post("/test", "test2");
         Route::get("/user", "user")->name("auth.user");
     });
+
+Route::get('/appointments', [AppointmentController::class, 'appointments'])  ;  
+
+Route::get('/services', [ServiceController::class, 'services']);
