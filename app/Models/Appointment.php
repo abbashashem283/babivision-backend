@@ -16,6 +16,10 @@ class Appointment extends Model
     }
 
     public function service(){
-        return $this->belongsTo(Service::class);
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+
+    public function clinic(){
+        return $this->belongsTo(Clinic::class, 'clinic_id');
     }
 }

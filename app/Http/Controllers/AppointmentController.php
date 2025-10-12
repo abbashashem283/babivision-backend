@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Appointment;
+use App\Models\Clinic;
 use App\Models\OpticianInfo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -13,7 +14,8 @@ class AppointmentController extends Controller
     public function appointments(Request $request)
     {
         $upto = $request->query("upto");
-        if (!$upto)
+        $clinic = $request->query("clinic");
+        if (!$upto || !$clinic)
             return response()->json(["message" => "No query parameters", "type" => "error"]);
         $today = Carbon::today();
 
@@ -21,8 +23,9 @@ class AppointmentController extends Controller
         $tillDayStr = $today->addDay((int) $upto)->format('Y-m-d');
 
         $appointments = Appointment::select('start_time', 'end_time', 'day', 'optician_id')
+            ->where('clinic_id', $clinic)
             ->whereBetween('day', [$todayStr, $tillDayStr])
-            ->orderBy('day')
+            ->orderBy('start_time')
             ->get()
             ->groupBy('day')
             ->map(function ($dailyAppointments) {
@@ -32,8 +35,10 @@ class AppointmentController extends Controller
         if($appointments->isEmpty())
             return response()->json(["message"=>"No appointments found", "type"=>"error"]);    
 
-        $optician_info = OpticianInfo::select('user_id', 'shift_start', 'shift_end')->get()->groupBy('user_id');
+        $optician_info = OpticianInfo::select('user_id', 'shift_start', 'shift_end')->where('clinic_id',$clinic)->get()->groupBy('user_id');
 
-        return compact('appointments', 'optician_info');
+        $clinic = Clinic::find($clinic)->first();
+
+        return compact('appointments', 'optician_info', 'clinic');
     }
 }

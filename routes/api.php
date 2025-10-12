@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\ServiceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -24,3 +25,4 @@ Route::prefix("auth")->controller(AuthController::class)->group(
 Route::get('/appointments', [AppointmentController::class, 'appointments'])  ;  
 
 Route::get('/services', [ServiceController::class, 'services']);
+Route::get('/clinics', [ClinicController::class, 'clinics']);
