@@ -12,6 +12,7 @@ class Appointment extends Model
         'user_id',
         'optician_id',
         'service_id',
+        'clinic_id',
         'day',
         'start_time',
         'end_time'

@@ -47,7 +47,7 @@ class AppointmentController extends Controller
     public function bookAppointment(Request $request)
     {
 
-        //return response()->json(["type"=>"error", "message"=>"just testing"]);
+       // return response()->json(["type"=>"error", "message"=>"just testing and {$request['clinic_id']}"]);
 
 
         $validator = Validator::make($request->all(), [
