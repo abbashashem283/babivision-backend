@@ -76,6 +76,11 @@ class AuthController extends JwtAuthController
         return $response;
     }
 
+    // function logout(Request $request){
+    //     $tokenValid = auth()->validate(["tokens"=>["access"=>$request->bearerToken()]]);
+    //     return response()->json(["type"=>"error", "message"=>$tokenValid]);
+    // }
+
     function test()
     {
         return response()->json(["message" => "this does not work"]);

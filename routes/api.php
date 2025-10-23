@@ -4,6 +4,8 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Middleware\Auth;
+use App\Http\Middleware\Authentication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,13 +25,21 @@ Route::prefix("auth")->controller(AuthController::class)->group(
     }
 );
 
-Route::prefix('appointments')->controller(AppointmentController::class)->group(
-    function () {
-        Route::get('/', 'appointments');
-        Route::post('/book', 'bookAppointment')  ;
-    }
-);
 
-
-Route::get('/services', [ServiceController::class, 'services']);
+Route::middleware(['api.auth'])->group(function () {
+    Route::prefix('appointments')->controller(AppointmentController::class)->group(
+        function () {
+            Route::get('/', 'appointments');
+            Route::post('/book', 'bookAppointment');
+            Route::get('/{userId}', 'appointments');
+        }
+    );
+    Route::get('/services', [ServiceController::class, 'services']);
 Route::get('/clinics', [ClinicController::class, 'clinics']);
+});
+
+
+
+
+
+

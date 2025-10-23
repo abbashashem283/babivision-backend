@@ -15,13 +15,20 @@ class AppointmentController extends Controller
 {
     public function appointments(Request $request)
     {
-        $upto = $request->query("upto");
+        $userId = $request->query('user');
+
+        if($userId){
+            $appointments = Appointment::with('user','service','clinic')->where('user_id',$userId)->get();
+            return compact('appointments');
+        }
+
+
         $clinic = $request->query("clinic");
         $startDay = $request->query("startDay");
-        if (!$upto || !$clinic || !$startDay)
+        if (!$clinic || !$startDay)
             return response()->json(["message" => "No query parameters", "type" => "error"]);
         $startDayDate = Carbon::parse($startDay);
-        $tillDayStr = $startDayDate->addDay((int) $upto)->format('Y-m-d');
+        
 
         $appointments = Appointment::select('start_time', 'end_time', 'day', 'optician_id')
             ->where('clinic_id', $clinic)
@@ -33,12 +40,16 @@ class AppointmentController extends Controller
                 return $dailyAppointments->groupBy('optician_id');
             });
 
-        if ($appointments->isEmpty())
-            return response()->json(["message" => "No appointments found $clinic $startDay $upto", "type" => "error"]);
+       // dd($appointments);    
+
+         
 
         $optician_info = OpticianInfo::select('user_id', 'shift_start', 'shift_end')->where('clinic_id', $clinic)->get()->groupBy('user_id');
 
         $clinic = Clinic::find($clinic)->first();
+
+        if ($appointments->isEmpty())
+            return compact('optician_info', 'clinic');
 
         return compact('appointments', 'optician_info', 'clinic');
     }
