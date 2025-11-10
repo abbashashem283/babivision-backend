@@ -17,8 +17,8 @@ class AppointmentController extends Controller
     {
         $userId = $request->query('user');
 
-        if($userId){
-            $appointments = Appointment::with('user','service','clinic')->where('user_id',$userId)->get();
+        if ($userId) {
+            $appointments = Appointment::with('user', 'service', 'clinic')->where('user_id', $userId)->get();
             return compact('appointments');
         }
 
@@ -28,7 +28,7 @@ class AppointmentController extends Controller
         if (!$clinic || !$startDay)
             return response()->json(["message" => "No query parameters", "type" => "error"]);
         $startDayDate = Carbon::parse($startDay);
-        
+
 
         $appointments = Appointment::select('start_time', 'end_time', 'day', 'optician_id')
             ->where('clinic_id', $clinic)
@@ -40,9 +40,9 @@ class AppointmentController extends Controller
                 return $dailyAppointments->groupBy('optician_id');
             });
 
-       // dd($appointments);    
+        // dd($appointments);    
 
-         
+
 
         $optician_info = OpticianInfo::select('user_id', 'shift_start', 'shift_end')->where('clinic_id', $clinic)->get()->groupBy('user_id');
 
@@ -58,7 +58,7 @@ class AppointmentController extends Controller
     public function bookAppointment(Request $request)
     {
 
-       // return response()->json(["type"=>"error", "message"=>"just testing and {$request['clinic_id']}"]);
+        // return response()->json(["type"=>"error", "message"=>"just testing and {$request['clinic_id']}"]);
 
 
         $validator = Validator::make($request->all(), [
@@ -91,10 +91,47 @@ class AppointmentController extends Controller
 
         try {
             Appointment::create($validated);
-        } catch (\Exception $e) {
-            return response()->json(["type" => "error", "message" => "couldn't create appointment {$e->getMessage()}"]);
+        } catch (\Exception) {
+            return response()->json(["type" => "error", "message" => "couldn't create appointment"]);
         }
 
         return response()->json(["type" => "success", "message" => "Appointment Added!"]);
+    }
+
+
+    public function deleteAppointment(Request $request)
+    {
+
+        $appointmentId = $request['id'];
+        $userId = $request['user_id'];
+        $csrfToken = $request['csrf_token'];
+
+        if(!$csrfToken)
+            return response()->json(["type"=>"error","message"=>"UnAuthorized"], 403);
+
+        $validatedTokens = auth()->validate(["tokens"=>["csrf"=>$csrfToken]]);
+        $csrfIsValid = !!$validatedTokens['csrf'];
+        if(!$csrfIsValid)
+            return response()->json(["type"=>"error","message"=>"untrusted identity"], 403);
+
+        if (!$appointmentId || !$userId)
+            return response()->json(["type" => "error", "message" => "Invalid user/appointment"]);
+
+        $appointment = Appointment::find($appointmentId);
+
+        if (!$appointment)
+            return response()->json(["type" => "error", "message" => "No appointment for given Id"]);
+
+        if ($appointment->user->id != $userId)
+            return response()->json(["type" => "error", "message" => "Wrong User for appointment!"]);
+
+
+        try {
+            $appointment->delete();
+        } catch (\Exception) {
+            return response()->json(["type" => "error", "message" => "couldn't delete appointment"]);
+        }
+
+        return response()->json(["type" => "success", "message" => "Appointment Deleted!"]);
     }
 }

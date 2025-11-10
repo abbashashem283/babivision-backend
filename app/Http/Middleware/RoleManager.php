@@ -22,7 +22,6 @@ class RoleManager
         if(!$isLoggedIn){
             return response()->json(["message"=>"You are not logged in", "type"=>"error"], 403);
         }
-
         $authUserRole = $currentUser->role ;
         //dd($role, $authUserRole);
 
