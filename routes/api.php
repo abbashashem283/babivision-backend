@@ -38,6 +38,10 @@ Route::middleware(['api.auth'])->group(function () {
             Route::get('/{userId}', 'appointments');
         }
     );
+
+
+
+    Route::post("/auth/password/change", [AuthController::class, 'passwordChange']);
     
 });
 

@@ -63,14 +63,20 @@ class AuthController extends JwtAuthController
             return parent::resetPassword($request);
     }
 
-    function passwordVerify(Request $request){
-        // $accessToken = $request->bearerToken();
-        // $csrfToken = $request['csrf_token'];
-        // $validatedTokens = auth()->validate(["tokens"=>["access"=>$accessToken, "csrf"=>$csrfToken]]);
-        // $tokensValid = !!$validatedTokens['access'] && !!$validatedTokens['csrf'] ;
-        // if(!$tokensValid)
-        //     return response()->json(["type"=>"error", "message"=>"UnAuthorized"], 403);
-
+    function passwordChange(Request $request){
+        $accessToken = $request->bearerToken();
+        $csrfToken = $request['csrf_token'];
+        $validatedTokens = auth()->validate(["tokens"=>["access"=>$accessToken, "csrf"=>$csrfToken]]);
+        $tokensValid = !!$validatedTokens['access'] && !!$validatedTokens['csrf'] ;
+        if(!$tokensValid)
+            return response()->json(["type"=>"error", "message"=>"UnAuthorized"], 403);
+        $validatedData = $request->validate([
+            "email"=>"required|email",
+            "password"=>"required"
+        ]);
+        if(!auth()->validate($validatedData))
+            return response()->json(["type"=>"error", "message"=>"Wrong Password!"]);
+        return parent::forgotPassword($request);
     }
 
     function login(Request $request){
