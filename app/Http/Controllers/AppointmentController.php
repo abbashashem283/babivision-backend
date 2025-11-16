@@ -18,7 +18,12 @@ class AppointmentController extends Controller
         $userId = $request->query('user');
 
         if ($userId) {
-            $appointments = Appointment::with('user', 'service', 'clinic')->where('user_id', $userId)->get();
+            $atDay = $request->query('at_day');
+            if ($atDay) {
+                $appointments = Appointment::with('clinic:id,name', 'service:id,name')->where('user_id', $userId)->where('day', $atDay)->get();
+            } else {
+                $appointments = Appointment::with('user', 'service', 'clinic')->where('user_id', $userId)->get();
+            }
             return compact('appointments');
         }
 
@@ -106,13 +111,13 @@ class AppointmentController extends Controller
         $userId = $request['user_id'];
         $csrfToken = $request['csrf_token'];
 
-        if(!$csrfToken)
-            return response()->json(["type"=>"error","message"=>"UnAuthorized"], 403);
+        if (!$csrfToken)
+            return response()->json(["type" => "error", "message" => "UnAuthorized"], 403);
 
-        $validatedTokens = auth()->validate(["tokens"=>["csrf"=>$csrfToken]]);
+        $validatedTokens = auth()->validate(["tokens" => ["csrf" => $csrfToken]]);
         $csrfIsValid = !!$validatedTokens['csrf'];
-        if(!$csrfIsValid)
-            return response()->json(["type"=>"error","message"=>"untrusted identity"], 403);
+        if (!$csrfIsValid)
+            return response()->json(["type" => "error", "message" => "untrusted identity"], 403);
 
         if (!$appointmentId || !$userId)
             return response()->json(["type" => "error", "message" => "Invalid user/appointment"]);

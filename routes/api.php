@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AppointmentController;
+use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\FeedbackController;
@@ -47,6 +48,7 @@ Route::middleware(['api.auth'])->group(function () {
 
 Route::get('/services', [ServiceController::class, 'services']);
 Route::get('/clinics', [ClinicController::class, 'clinics']);
+Route::get('/app/versions', [AppVersionController::class, 'versions']);
 
 Route::post("/feedback/add", [FeedbackController::class, 'addFeedback']);
 

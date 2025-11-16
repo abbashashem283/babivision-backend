@@ -15,7 +15,7 @@ class Authentication
      */
     public function handle(Request $request, Closure $next): Response
     {
-         return $next($request);
+         //return $next($request);
         $currentUser = auth()->user();
         $isLoggedIn = !!$currentUser;
 
