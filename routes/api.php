@@ -5,6 +5,7 @@ use App\Http\Controllers\AppVersionController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\FeedbackController;
+use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Middleware\Auth;
 use App\Http\Middleware\Authentication;
@@ -40,9 +41,10 @@ Route::middleware(['api.auth'])->group(function () {
         }
     );
 
-
+    Route::get('/prescriptions', [PrescriptionController::class, 'prescriptions']);
 
     Route::post("/auth/password/change", [AuthController::class, 'passwordChange']);
+
     
 });
 
