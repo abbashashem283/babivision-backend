@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -30,9 +31,8 @@ class Product extends Model
         return $this->belongsTo(SubCategory::class);
     }
 
-    // Product.php
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class);
+    public function attributes(){
+        return $this->belongsToMany(Attribute::class)->withPivot('value','image')->withTimestamps();
     }
+   
 }
