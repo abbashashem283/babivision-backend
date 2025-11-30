@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ClinicController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\PrescriptionController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Middleware\Auth;
 use App\Http\Middleware\Authentication;
@@ -53,6 +54,13 @@ Route::get('/clinics', [ClinicController::class, 'clinics']);
 Route::get('/app/versions', [AppVersionController::class, 'versions']);
 
 Route::post("/feedback/add", [FeedbackController::class, 'addFeedback']);
+
+Route::prefix("/products")->group(function (){
+    Route::controller(ProductController::class)->group(function () {
+        Route::get("/",'index');
+        Route::get("/{category}",'byCategory');
+    });
+});
 
 Route::get("/util", function () {
     $services = Service::all();

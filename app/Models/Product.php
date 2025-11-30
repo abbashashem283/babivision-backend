@@ -18,6 +18,10 @@ class Product extends Model
         'stock_quantity',
     ];
 
+    protected $casts = [
+        'price'=>'float'
+    ];
+
 
     // Product.php (Model)
     // Product.php
